@@ -1,4 +1,4 @@
-package com.eldoheiri.realtime_analytics.dataobjects;
+package com.eldoheiri.realtime_analytics.dataobjects.events;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -6,8 +6,6 @@ import java.util.Map;
 
 import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.format.annotation.DateTimeFormat;
-
-import com.eldoheiri.realtime_analytics.dataobjects.events.ApplicationEventDTO;
 
 import jakarta.validation.constraints.NotNull;
 

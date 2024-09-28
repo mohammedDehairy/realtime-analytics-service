@@ -5,7 +5,8 @@ import java.util.Map;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import jakarta.validation.constraints.NotEmpty;
+import com.eldoheiri.realtime_analytics.dataobjects.validators.EnumValidator;
+
 import jakarta.validation.constraints.NotNull;
 
 public class ApplicationEventDTO {
@@ -15,13 +16,11 @@ public class ApplicationEventDTO {
     @NotNull
     private Timestamp timestamp;
 
-    public enum EventType {
-        heart_beat;
-    }
-
-    @NotNull
-    @NotEmpty
-    private String type;
+    @EnumValidator(
+        enumClass = EventType.class,
+        message = "The event type is not recognized"
+    )
+    private EventType type;
 
     private Map<String, Object> attributes;
 
@@ -42,11 +41,11 @@ public class ApplicationEventDTO {
     }
 
 
-    public String getType() {
+    public EventType getType() {
         return this.type;
     }
 
-    public void setType(String type) {
+    public void setType(EventType type) {
         this.type = type;
     }
 

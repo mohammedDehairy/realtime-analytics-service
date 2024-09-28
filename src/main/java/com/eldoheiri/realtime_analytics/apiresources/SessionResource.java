@@ -13,9 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.eldoheiri.datastore.DataStore;
 import com.eldoheiri.realtime_analytics.dataaccess.dataobjects.ApplicationEvent;
 import com.eldoheiri.realtime_analytics.dataaccess.dataobjects.Session;
-import com.eldoheiri.realtime_analytics.dataobjects.HeartBeatDTO;
 import com.eldoheiri.realtime_analytics.dataobjects.SessionDTO;
 import com.eldoheiri.realtime_analytics.dataobjects.events.ApplicationEventDTO;
+import com.eldoheiri.realtime_analytics.dataobjects.events.HeartBeatDTO;
+import com.eldoheiri.realtime_analytics.exceptionhandling.Exceptions.heartbeat.HeartBeatException;
 import com.eldoheiri.realtime_analytics.exceptionhandling.Exceptions.session.SessionException;
 
 @RestController
@@ -50,8 +51,8 @@ public class SessionResource {
         try {
             return insert(sessionHeartBeat, sessionId);
         } catch (IllegalArgumentException | SQLException e) {
-            throw new SessionException(e);
-        } catch (SessionException e) {
+            throw new HeartBeatException(e);
+        } catch (HeartBeatException e) {
             throw e;
         }
     }
@@ -91,7 +92,7 @@ public class SessionResource {
             applicationEvent.setPayload(dto.getAttributes());
             applicationEvent.setSessionId(sessionId);
             applicationEvent.setTimestamp(dto.getTimestamp());
-            applicationEvent.setType(dto.getType());
+            applicationEvent.setType(dto.getType().name());
             result.add(applicationEvent);
         }
         return result;
