@@ -1,15 +1,15 @@
 package com.eldoheiri.realtime_analytics.dataobjects.error;
 
 public class ErrorResponse {
-    private String code;
+    private int code;
 
     private String message;
 
-    public String getCode() {
+    public int getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(int code) {
         this.code = code;
     }
 
@@ -34,7 +34,7 @@ public class ErrorResponse {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((code == null) ? 0 : code.hashCode());
+        result = prime * result + code;
         result = prime * result + ((message == null) ? 0 : message.hashCode());
         return result;
     }
@@ -48,10 +48,7 @@ public class ErrorResponse {
         if (getClass() != obj.getClass())
             return false;
         ErrorResponse other = (ErrorResponse) obj;
-        if (code == null) {
-            if (other.code != null)
-                return false;
-        } else if (!code.equals(other.code))
+        if (code != other.code)
             return false;
         if (message == null) {
             if (other.message != null)

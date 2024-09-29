@@ -15,7 +15,7 @@ public class ValidationExceptionController {
     @ExceptionHandler(value = ConstraintViolationException.class)
     public ResponseEntity<ErrorResponse> handleException(ConstraintViolationException exception) {
         ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setCode("400");
+        errorResponse.setCode(400);
         errorResponse.setMessage(exception.getLocalizedMessage());
         return ResponseEntity.badRequest().body(errorResponse);
     }
@@ -23,7 +23,7 @@ public class ValidationExceptionController {
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleException(MethodArgumentNotValidException exception) {
         ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setCode("400");
+        errorResponse.setCode(400);
         errorResponse.setMessage(exception.getLocalizedMessage());
         return ResponseEntity.badRequest().body(errorResponse);
     }
@@ -31,7 +31,7 @@ public class ValidationExceptionController {
     @ExceptionHandler(value = HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleException(HttpMessageNotReadableException exception) {
         ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setCode("400");
+        errorResponse.setCode(400);
         errorResponse.setMessage(exception.getLocalizedMessage());
         return ResponseEntity.badRequest().body(errorResponse);
     }

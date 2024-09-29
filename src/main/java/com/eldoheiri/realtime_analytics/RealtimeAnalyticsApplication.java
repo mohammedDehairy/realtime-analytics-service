@@ -8,11 +8,18 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
+import com.eldoheiri.realtime_analytics.security.JWTUtil;
+
 @SpringBootApplication
 public class RealtimeAnalyticsApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(RealtimeAnalyticsApplication.class, args);
+	}
+
+	@Bean
+	public JWTUtil jwtUtil() {
+		return new JWTUtil();
 	}
 
 	@Bean

@@ -13,7 +13,7 @@ public class ServerExceptionController {
     @ExceptionHandler(value = SessionException.class)
     public ResponseEntity<ErrorResponse> exception(SessionException exception) {
         ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setCode("500");
+        errorResponse.setCode(500);
         errorResponse.setMessage("Failed to record Session");
         return ResponseEntity.internalServerError().body(errorResponse);
     }
@@ -21,7 +21,7 @@ public class ServerExceptionController {
     @ExceptionHandler(value = HeartBeatException.class)
     public ResponseEntity<ErrorResponse> exception(HeartBeatException exception) {
         ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setCode("500");
+        errorResponse.setCode(500);
         errorResponse.setMessage("Failed to record heart beat");
         return ResponseEntity.internalServerError().body(errorResponse);
     }

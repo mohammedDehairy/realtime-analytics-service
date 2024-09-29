@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ArrayList;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,10 +19,14 @@ import com.eldoheiri.realtime_analytics.dataobjects.events.ApplicationEventDTO;
 import com.eldoheiri.realtime_analytics.dataobjects.events.HeartBeatDTO;
 import com.eldoheiri.realtime_analytics.exceptionhandling.Exceptions.heartbeat.HeartBeatException;
 import com.eldoheiri.realtime_analytics.exceptionhandling.Exceptions.session.SessionException;
+import com.eldoheiri.realtime_analytics.security.JWTUtil;
 
 @RestController
 @RequestMapping("/api/v1/{applicationId}/session")
 public class SessionResource {
+
+    @Autowired
+    private JWTUtil jwtUtil;
 
     @PostMapping
     public SessionDTO newSession(@RequestBody HeartBeatDTO sessionHeartBeat, @PathVariable Integer applicationId) {
@@ -37,6 +42,7 @@ public class SessionResource {
             SessionDTO response = new SessionDTO();
             response.setApplicationId(session.getApplicationId());
             response.setId(session.getId());
+            response.setToken(jwtUtil.generateTokenString(session.getId().toString()));
             return response;
         } catch (IllegalArgumentException | SQLException e) {
             throw new SessionException(e);

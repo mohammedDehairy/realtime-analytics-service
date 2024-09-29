@@ -10,9 +10,14 @@ public final class DataSource {
 
     private static HikariDataSource createDataSource() {
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:postgresql://localhost:5432/analytics");
-        config.setUsername("analytics");
-        config.setPassword("analytics");
+        String dbHost = System.getenv("DB_HOST");
+        String dbPort = System.getenv("DB_PORT");
+        String dbName = System.getenv("DB_NAME");
+        String dbUsername = System.getenv("DB_USER_NAME");
+        String dbPassword = System.getenv("DB_PASSWORD");
+        config.setJdbcUrl("jdbc:postgresql://" + dbHost + ":" + dbPort + "/" + dbName);
+        config.setUsername(dbUsername);
+        config.setPassword(dbPassword);
         config.addDataSourceProperty("ssl", "false");
         config.setAutoCommit(false);
         config.setMaximumPoolSize(40);
