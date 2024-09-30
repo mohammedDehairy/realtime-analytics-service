@@ -1,4 +1,4 @@
-package com.eldoheiri.realtime_analytics.security;
+package com.eldoheiri.realtime_analytics.security.authentication;
 
 import java.io.IOException;
 
@@ -52,7 +52,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             filterChain.doFilter(request, response);
         } catch (Exception e) {
-            e.printStackTrace();
             ErrorResponse errorResponse = new ErrorResponse();
             errorResponse.setMessage(e.getMessage());
             errorResponse.setCode(401);

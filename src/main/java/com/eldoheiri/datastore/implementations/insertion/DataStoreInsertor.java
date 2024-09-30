@@ -16,14 +16,8 @@ import com.eldoheiri.datastore.helpers.EntityHelpers;
 import com.eldoheiri.datastore.sqlbuilders.SqlStatementBuilder;
 
 public final class DataStoreInsertor implements IDataStoreInsertor {
-    private final Connection dbConnection;
-
-    public DataStoreInsertor(Connection dbConnection) {
-        Objects.requireNonNull(dbConnection);
-        this.dbConnection = dbConnection;
-    }
     
-    public <Entity> boolean insert(Entity entity) throws SQLException {
+    public <Entity> boolean insert(Entity entity, Connection dbConnection) throws SQLException {
         Objects.requireNonNull(entity);
         if (!entity.getClass().isAnnotationPresent(DataBaseTable.class)) {
             throw new IllegalArgumentException(
@@ -36,7 +30,7 @@ public final class DataStoreInsertor implements IDataStoreInsertor {
         return true;
     }
 
-    public <Entity> int insert(List<Entity> entities) throws SQLException {
+    public <Entity> int insert(List<Entity> entities, Connection dbConnection) throws SQLException {
         Objects.requireNonNull(entities);
         if (entities.size() == 0) {
             return 0;

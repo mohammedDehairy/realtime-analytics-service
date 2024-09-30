@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.eldoheiri.datastore.DataStore;
+import com.eldoheiri.realtime_analytics.dataaccess.DataSource;
 import com.eldoheiri.realtime_analytics.dataaccess.dataobjects.ApplicationEvent;
 import com.eldoheiri.realtime_analytics.dataaccess.dataobjects.Session;
 import com.eldoheiri.realtime_analytics.dataobjects.SessionDTO;
@@ -19,7 +20,9 @@ import com.eldoheiri.realtime_analytics.dataobjects.events.ApplicationEventDTO;
 import com.eldoheiri.realtime_analytics.dataobjects.events.HeartBeatDTO;
 import com.eldoheiri.realtime_analytics.exceptionhandling.Exceptions.heartbeat.HeartBeatException;
 import com.eldoheiri.realtime_analytics.exceptionhandling.Exceptions.session.SessionException;
-import com.eldoheiri.realtime_analytics.security.JWTUtil;
+import com.eldoheiri.realtime_analytics.security.authentication.JWTUtil;
+
+import java.sql.Connection;
 
 @RestController
 @RequestMapping("/api/v1/{applicationId}/session")
@@ -30,14 +33,14 @@ public class SessionResource {
 
     @PostMapping
     public SessionDTO newSession(@RequestBody HeartBeatDTO sessionHeartBeat, @PathVariable Integer applicationId) {
-        try {
-            DataStore dataStore = new DataStore();
+        try (Connection dbConnection = DataSource.getConnection()) {
 
+            DataStore dataStore = new DataStore();
             Session session = new Session();
             session.setApplicationId(applicationId);
-            dataStore.insert(session);
+            dataStore.insert(session, dbConnection);
 
-            insert(sessionHeartBeat, session.getId());
+            insert(sessionHeartBeat, session.getId(), dbConnection);
 
             SessionDTO response = new SessionDTO();
             response.setApplicationId(session.getApplicationId());
@@ -54,8 +57,8 @@ public class SessionResource {
 
     @PostMapping("/{sessionId}/heartBeat")
     public HeartBeatDTO heartBeat(@RequestBody HeartBeatDTO sessionHeartBeat, @PathVariable Integer sessionId) {
-        try {
-            return insert(sessionHeartBeat, sessionId);
+        try (Connection dbConnection = DataSource.getConnection()) {
+            return insert(sessionHeartBeat, sessionId, dbConnection);
         } catch (IllegalArgumentException | SQLException e) {
             throw new HeartBeatException(e);
         } catch (HeartBeatException e) {
@@ -63,12 +66,12 @@ public class SessionResource {
         }
     }
 
-    private HeartBeatDTO insert(HeartBeatDTO sessionHeartBeat, Integer sessionId) throws SQLException {
+    private HeartBeatDTO insert(HeartBeatDTO sessionHeartBeat, Integer sessionId, Connection dbConnection) throws SQLException {
         DataStore dataStore = new DataStore();
         ApplicationEvent heartBeat = createHeartBeatEvent(sessionHeartBeat, sessionId);
         List<ApplicationEvent> applicationEvents = createApplicationEvents(sessionHeartBeat, sessionId);
-        dataStore.insert(heartBeat);
-        dataStore.insert(applicationEvents);
+        dataStore.insert(heartBeat, dbConnection);
+        dataStore.insert(applicationEvents, dbConnection);
         sessionHeartBeat.setId(heartBeat.getId());
         if (sessionHeartBeat.getEvents() == null || sessionHeartBeat.getEvents().isEmpty()) {
             return sessionHeartBeat;

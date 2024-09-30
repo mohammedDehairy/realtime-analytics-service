@@ -3,8 +3,10 @@ package com.eldoheiri.datastore.implementations.insertion;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface IDataStoreInsertor {
-    <Entity> boolean insert(Entity entity) throws SQLException;
+import java.sql.Connection;
 
-    <Entity> int insert(List<Entity> entities) throws SQLException;
+public interface IDataStoreInsertor {
+    <Entity> boolean insert(Entity entity, Connection dbConnection) throws SQLException;
+
+    <Entity> int insert(List<Entity> entities, Connection dbConnection) throws SQLException;
 }

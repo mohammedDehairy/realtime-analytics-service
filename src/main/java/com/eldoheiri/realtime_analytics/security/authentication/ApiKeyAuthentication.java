@@ -1,4 +1,4 @@
-package com.eldoheiri.realtime_analytics.security;
+package com.eldoheiri.realtime_analytics.security.authentication;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;

@@ -1,4 +1,4 @@
-package com.eldoheiri.realtime_analytics.security;
+package com.eldoheiri.realtime_analytics.security.authentication;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

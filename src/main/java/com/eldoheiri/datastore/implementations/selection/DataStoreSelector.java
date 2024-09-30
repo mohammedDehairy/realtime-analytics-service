@@ -19,22 +19,19 @@ import com.eldoheiri.datastore.sqlpredicatebuilder.basetypes.buildersinterfaces.
 import com.eldoheiri.datastore.sqlpredicatebuilder.basetypes.concretebuilders.SQLPredicateBuilder;
 
 public class DataStoreSelector {
-    private final Connection dbConnection;
 
     private final EntityFactory factory;
 
-    public DataStoreSelector(Connection dbConnection) {
-        this(new DefaultEntityFactory(), dbConnection);
+    public DataStoreSelector() {
+        this(new DefaultEntityFactory());
     }
 
-    public DataStoreSelector(EntityFactory factory, Connection dbConnection) {
+    public DataStoreSelector(EntityFactory factory) {
         Objects.requireNonNull(factory);
-        Objects.requireNonNull(dbConnection);
         this.factory = factory;
-        this.dbConnection = dbConnection;
     }
 
-    public <Entity> List<Entity> get(IPredicate predicate, Class<Entity> entityClass) throws SQLException {
+    public <Entity> List<Entity> get(IPredicate predicate, Class<Entity> entityClass, Connection dbConnection) throws SQLException {
         SqlStatementBuilder sqlStatementBuilder = new SqlStatementBuilder();
         dbConnection.setAutoCommit(false);
         List<Entity> result = select(predicate, entityClass, dbConnection, sqlStatementBuilder);

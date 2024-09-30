@@ -12,38 +12,33 @@ import com.eldoheiri.datastore.implementations.insertion.IDataStoreInsertor;
 import com.eldoheiri.datastore.implementations.selection.DataStoreSelector;
 import com.eldoheiri.datastore.implementations.selection.IDataStoreSelector;
 import com.eldoheiri.datastore.sqlpredicatebuilder.basetypes.buildersinterfaces.IPredicate;
-import com.eldoheiri.realtime_analytics.dataaccess.DataSource;
 
 public class DataStore implements IDataStoreInsertor, IDataStoreSelector {
 
     private final EntityFactory factory;
 
-    private final Connection dbConnection;
-
     public DataStore() throws SQLException {
-        this(new DefaultEntityFactory(), DataSource.getConnection());
+        this(new DefaultEntityFactory());
     }
 
-    public DataStore(EntityFactory factory, Connection dbConnection) {
+    public DataStore(EntityFactory factory) {
         Objects.requireNonNull(factory);
-        Objects.requireNonNull(dbConnection);
         this.factory = factory;
-        this.dbConnection = dbConnection;
     }
 
     @Override
-    public <Entity> boolean insert(Entity entity) throws SQLException {
+    public <Entity> boolean insert(Entity entity, Connection dbConnection) throws SQLException {
         Objects.requireNonNull(entity);
-        return new DataStoreInsertor(dbConnection).insert(entity);
+        return new DataStoreInsertor().insert(entity, dbConnection);
     }
 
     @Override
-    public <Entity> int insert(List<Entity> entities) throws SQLException {
+    public <Entity> int insert(List<Entity> entities, Connection dbConnection) throws SQLException {
         Objects.requireNonNull(entities);
         if (entities.isEmpty()) {
             return 0;
         }
-        return new DataStoreInsertor(dbConnection).insert(entities);
+        return new DataStoreInsertor().insert(entities, dbConnection);
     }
 
     public <Entity> boolean update(Entity entity) {
@@ -55,7 +50,7 @@ public class DataStore implements IDataStoreInsertor, IDataStoreSelector {
     }
 
     @Override
-    public <Entity> List<Entity> get(IPredicate predicate, Class<Entity> entityClass) throws SQLException {
-        return new DataStoreSelector(factory, dbConnection).get(predicate, entityClass);
+    public <Entity> List<Entity> get(IPredicate predicate, Class<Entity> entityClass, Connection dbConnection) throws SQLException {
+        return new DataStoreSelector(factory).get(predicate, entityClass, dbConnection);
     }
 }

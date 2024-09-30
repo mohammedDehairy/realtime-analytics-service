@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
-import com.eldoheiri.realtime_analytics.security.JWTUtil;
+import com.eldoheiri.realtime_analytics.security.authentication.JWTUtil;
 
 @SpringBootApplication
 public class RealtimeAnalyticsApplication {
