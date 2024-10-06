@@ -26,7 +26,6 @@ public final class DataStoreInsertor implements IDataStoreInsertor {
         SqlStatementBuilder sqlStatementBuilder = new SqlStatementBuilder();
         dbConnection.setAutoCommit(false);
         insert(entity, sqlStatementBuilder, dbConnection);
-        dbConnection.commit();
         return true;
     }
 
@@ -49,7 +48,6 @@ public final class DataStoreInsertor implements IDataStoreInsertor {
             dbConnection.rollback();
             return 0;
         }
-        dbConnection.commit();
         return counter;
     }
 
@@ -79,15 +77,19 @@ public final class DataStoreInsertor implements IDataStoreInsertor {
         var statementBuilder = new SqlStatementBuilder();
         for (ConcreteRelation relation : relations) {
             Class<?> fieldType = relation.valueType();
+            var objectValue = relation.value();
+            if (objectValue == null) {
+                continue;
+            }
             if (Collection.class.isAssignableFrom(fieldType)) {
-                Collection<?> value = (Collection<?>) relation.value();
+                Collection<?> value = (Collection<?>) objectValue;
                 for (Object object : value) {
                     EntityHelpers.setValueOf(EntityHelpers.findField(object, relation.exportedForeignKeyName()), object,
                             primaryKeyValue);
                     insert(object, statementBuilder, connection);
                 }
             } else {
-                var object = relation.value();
+                var object = objectValue;
                 EntityHelpers.setValueOf(EntityHelpers.findField(object, relation.exportedForeignKeyName()), object,
                         primaryKeyValue);
                 insert(object, statementBuilder, connection);

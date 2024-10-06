@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.eldoheiri.realtime_analytics.dataobjects.error.ErrorResponse;
+import com.eldoheiri.realtime_analytics.exceptionhandling.Exceptions.DeviceException;
 import com.eldoheiri.realtime_analytics.exceptionhandling.Exceptions.heartbeat.HeartBeatException;
 import com.eldoheiri.realtime_analytics.exceptionhandling.Exceptions.session.SessionException;
 
@@ -23,6 +24,14 @@ public class ServerExceptionController {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setCode(500);
         errorResponse.setMessage("Failed to record heart beat");
+        return ResponseEntity.internalServerError().body(errorResponse);
+    }
+
+    @ExceptionHandler(value = DeviceException.class)
+    public ResponseEntity<ErrorResponse> exception(DeviceException exception) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setCode(500);
+        errorResponse.setMessage("Failed to create new device.");
         return ResponseEntity.internalServerError().body(errorResponse);
     }
 }

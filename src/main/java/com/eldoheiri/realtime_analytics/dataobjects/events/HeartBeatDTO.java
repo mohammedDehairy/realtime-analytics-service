@@ -3,6 +3,7 @@ package com.eldoheiri.realtime_analytics.dataobjects.events;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
 
 import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -39,6 +40,9 @@ public final class HeartBeatDTO {
 
 
     public List<ApplicationEventDTO> getEvents() {
+        if (this.events == null) {
+            return new ArrayList<>();
+        }
         return this.events;
     }
 

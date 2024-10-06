@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import com.eldoheiri.datastore.factories.DefaultEntityFactory;
 import com.eldoheiri.datastore.factories.EntityFactory;
+import com.eldoheiri.datastore.implementations.deletion.DataStoreDeletor;
 import com.eldoheiri.datastore.implementations.insertion.DataStoreInsertor;
 import com.eldoheiri.datastore.implementations.insertion.IDataStoreInsertor;
 import com.eldoheiri.datastore.implementations.selection.DataStoreSelector;
@@ -45,8 +46,12 @@ public class DataStore implements IDataStoreInsertor, IDataStoreSelector {
         return true;
     }
 
-    public <Entity> boolean delete(Entity entity) {
-        return true;
+    public <Entity> boolean delete(IPredicate predicate, Class<Entity> entityClass, Connection dbConnection, boolean cascade) throws SQLException {
+        return new DataStoreDeletor().delete(predicate, entityClass, dbConnection, cascade);
+    }
+
+    public <Entity> boolean delete(IPredicate predicate, Class<Entity> entityClass, Connection dbConnection) throws SQLException {
+        return delete(predicate, entityClass, dbConnection, false);
     }
 
     @Override

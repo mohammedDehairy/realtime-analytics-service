@@ -8,6 +8,11 @@ import com.eldoheiri.datastore.sqlpredicatebuilder.basetypes.buildersinterfaces.
 import java.sql.Connection;
 
 public final class SqlStatementBuilder implements IInsertStatementBuilder, ISelectStatementBuilder {
+
+    public PreparedStatement deleteStatement(IPredicate predicate, Class<?> entityClass, Connection connection, boolean cascade) throws SQLException {
+        return new DeleteStatementBuilder().deleteStatement(predicate, entityClass, connection, cascade);
+    }
+
     public PreparedStatement insertStatement(Object entity,
             Connection connection) throws SQLException {
         return new InsertStatementBuilder().insertStatement(entity, connection);

@@ -22,7 +22,7 @@ public class APIKeyFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         String apiKey = request.getHeader("x-api-key");
-        if (!request.getRequestURI().endsWith("/session")) {
+        if (!request.getRequestURI().endsWith("/session") && !request.getRequestURI().endsWith("/device")) {
             ErrorResponse errorResponse = new ErrorResponse();
             errorResponse.setMessage("Invalid API path");
             errorResponse.setCode(404);

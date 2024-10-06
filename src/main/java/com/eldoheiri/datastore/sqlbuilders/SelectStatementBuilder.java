@@ -19,6 +19,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public final class SelectStatementBuilder implements ISelectStatementBuilder {
     public PreparedStatement selectStatement(IPredicate predicate, Class<?> entityClass, Connection connection) throws SQLException {
+        if (!entityClass.isAnnotationPresent(DataBaseTable.class)) {
+            throw new IllegalArgumentException("Entity of type: " + entityClass + " must be annotated with @DataBaseTable");
+        }
         SchemaEntity schemaEntity = parseSchema(entityClass);
         StringBuilder queryBuilder = new StringBuilder();
         queryBuilder.append("Select ");

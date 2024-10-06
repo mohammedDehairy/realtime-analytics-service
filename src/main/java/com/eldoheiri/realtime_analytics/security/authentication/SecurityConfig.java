@@ -19,7 +19,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain apiKeyfilterChain(HttpSecurity http) throws Exception {
-        return http.securityMatcher("/api/v*/*/session")
+        return http.securityMatcher("/api/v*/{applicationId}/session", "/api/v*/{applicationId}/device")
         .addFilterBefore(new APIKeyFilter(), UsernamePasswordAuthenticationFilter.class)
         .csrf(AbstractHttpConfigurer::disable)
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -28,7 +28,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain jwtFilterChain(HttpSecurity http) throws Exception {
-        return http.securityMatcher("/api/v1/{applicationId}/session/*/heartBeat")
+        return http.securityMatcher("/api/v*/{applicationId}/session/{sessionId}/heartBeat")
         .addFilterBefore(new JwtRequestFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
         .csrf(AbstractHttpConfigurer::disable)
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
